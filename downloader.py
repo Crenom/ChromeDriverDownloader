@@ -12,7 +12,7 @@ def _extract_main_version(chrome_version: str) -> str:
 
 
 def _get_win32_link(main_version: str) -> str:
-    response = requests.get('https://chromedriver.chromium.org', timeout=180)
+    response = requests.get('https://chromedriver.chromium.org', timeout=180, verify=False)
     soup = BeautifulSoup(response.text, 'lxml')
 
     for link in soup.findAll('a'):
@@ -24,7 +24,7 @@ def _get_win32_link(main_version: str) -> str:
 
 def _download_zip(url: str):
     local_filename = url.split('/')[-1]
-    with requests.get(url, stream=True) as r:
+    with requests.get(url, stream=True, verify=False) as r:
         r.raise_for_status()
         with open(local_filename, 'wb') as f:
             for chunk in r.iter_content(chunk_size=8192):
